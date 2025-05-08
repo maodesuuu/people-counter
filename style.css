@@ -21,7 +21,12 @@ video, canvas {
   height: 100%;
   object-fit: cover;
   position: absolute;
+  z-index: 0;
 }
+canvas {
+  z-index: 1;
+}
+
 
 .overlay-text {
   position: absolute;
