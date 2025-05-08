@@ -87,6 +87,9 @@ async function detectFrame() {
   try {
     const predictions = await model.detect(video);
     const people = predictions.filter(pred => pred.class === 'person' && pred.score > 0.6);
+
+    log('detectFrame running');
+
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 
@@ -97,6 +100,7 @@ async function detectFrame() {
       ctx.strokeRect(x, y, width, height);
       ctx.fillStyle = 'lime';
       ctx.fillText(`${(person.score * 100).toFixed(1)}%`, x, y > 10 ? y - 5 : 10);
+
       const matched = trackedPeople.find(tp => iou(tp.bbox, person.bbox) > 0.3);
       if (matched) {
         ctx.fillText(`ID: ${matched.id}`, x, y + height + 15);
@@ -124,65 +128,36 @@ async function detectFrame() {
 }
 
 async function setupCamera() {
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({
-        video: {
-          width: { ideal: 640 },
-          height: { ideal: 480 },
-          facingMode: "environment"
-        }
-      });
-      log('カメラストリーム取得成功');
-      video.srcObject = stream;
-  
-      await new Promise(resolve => {
-        if (video.readyState >= 1) {
-          resolve();
-        } else {
-          video.addEventListener('loadedmetadata', resolve, { once: true });
-        }
-      });
-  
-      await video.play();
-  
-      // 📌 ここでキャンバスのサイズを合わせる（スマホ対策）
-      canvas.width = video.videoWidth;
-      canvas.height = video.videoHeight;
-  
-      return video;
-    } catch (err) {
-      log(`カメラの起動に失敗しました: ${err.message}`);
-      throw err;
-    }
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({
+      video: {
+        width: { ideal: 640 },
+        height: { ideal: 480 },
+        facingMode: "environment"
+      }
+    });
+    log('カメラストリーム取得成功');
+    video.srcObject = stream;
+
+    await new Promise(resolve => {
+      if (video.readyState >= 1) {
+        resolve();
+      } else {
+        video.addEventListener('loadedmetadata', resolve, { once: true });
+      }
+    });
+
+    await video.play();
+
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+
+    return video;
+  } catch (err) {
+    log(`カメラの起動に失敗しました: ${err.message}`);
+    throw err;
   }
-  
-  async function detectFrame() {
-    if (!isRunning) return;
-  
-    const now = performance.now();
-    if (now - lastDetectionTime < detectionInterval) {
-      requestAnimationFrame(detectFrame);
-      return;
-    }
-    lastDetectionTime = now;
-  
-    try {
-      const predictions = await model.detect(video);
-      const people = predictions.filter(pred => pred.class === 'person' && pred.score > 0.6);
-  
-      // 📌 動作確認ログ
-      log('detectFrame running');
-  
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-  
-      // ...残りの描画処理はそのまま
-    } catch (err) {
-      log(`エラー: ${err.message}`);
-      isRunning = false;
-      return;
-    }
-  
+}
 
 startBtn.addEventListener('click', async () => {
   if (isRunning) return;
@@ -218,4 +193,3 @@ stopBtn.addEventListener('click', () => {
   isRunning = false;
   log('検出を停止しました。');
 });
-}
