@@ -134,7 +134,15 @@ async function setupCamera() {
     });
     log('カメラストリーム取得成功');
     video.srcObject = stream;
-    await new Promise(resolve => video.onloadedmetadata = resolve);
+
+    await new Promise(resolve => {
+      if (video.readyState >= 1) {
+        resolve();
+      } else {
+        video.addEventListener('loadedmetadata', resolve, { once: true });
+      }
+    });
+
     await video.play();
     return video;
   } catch (err) {
@@ -142,6 +150,7 @@ async function setupCamera() {
     throw err;
   }
 }
+
 
 startBtn.addEventListener('click', async () => {
   if (isRunning) return;
