@@ -159,37 +159,39 @@ async function setupCamera() {
   }
 }
 
-startBtn.addEventListener('click', async () => {
-  if (isRunning) return;
-  isRunning = true;
-  log('開始ボタンが押されました');
-  log('検出を開始します…');
+document.addEventListener('DOMContentLoaded', () => {
+  startBtn.addEventListener('click', async () => {
+    if (isRunning) return;
+    isRunning = true;
+    log('開始ボタンが押されました');
+    log('検出を開始します…');
 
-  try {
-    await setupCamera();
+    try {
+      await setupCamera();
 
-    await new Promise(resolve => {
-      if (video.videoWidth > 0 && video.videoHeight > 0) resolve();
-      else video.onloadeddata = resolve;
-    });
+      await new Promise(resolve => {
+        if (video.videoWidth > 0 && video.videoHeight > 0) resolve();
+        else video.onloadeddata = resolve;
+      });
 
-    canvas.width = video.videoWidth;
-    canvas.height = video.videoHeight;
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
 
-    if (!model) {
-      model = await cocoSsd.load();
-      log('モデルをロードしました。');
+      if (!model) {
+        model = await cocoSsd.load();
+        log('モデルをロードしました。');
+      }
+
+      detectFrame();
+    } catch (err) {
+      log(`初期化中にエラーが発生しました: ${err.message}`);
+      isRunning = false;
     }
+  });
 
-    detectFrame();
-  } catch (err) {
-    log(`初期化中にエラーが発生しました: ${err.message}`);
+  stopBtn.addEventListener('click', () => {
+    if (!isRunning) return;
     isRunning = false;
-  }
-});
-
-stopBtn.addEventListener('click', () => {
-  if (!isRunning) return;
-  isRunning = false;
-  log('検出を停止しました。');
+    log('検出を停止しました。');
+  });
 });
