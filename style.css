@@ -8,25 +8,30 @@ body {
 .container {
   display: flex;
   height: 90vh;
+  flex-direction: row;
 }
 
 .left-panel {
   position: relative;
   flex: 1;
   background: black;
+  overflow: hidden;
 }
 
 video, canvas {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
   position: absolute;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover;
+  display: block;
+}
+
+video {
   z-index: 0;
 }
 canvas {
   z-index: 1;
 }
-
 
 .overlay-text {
   position: absolute;
@@ -35,10 +40,10 @@ canvas {
   background: rgba(0,0,0,0.5);
   padding: 4px;
   font-size: 14px;
+  z-index: 2;
 }
 
 #people-count { top: 10px; left: 10px; }
-#fps { top: 30px; left: 10px; }
 #datetime { bottom: 10px; left: 10px; color: lime; }
 
 .right-panel {
