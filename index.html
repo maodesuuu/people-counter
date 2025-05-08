@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>人数カウントシステム</title>
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<div class="container">
+  <div class="left-panel">
+    <video id="video" autoplay muted playsinline></video>
+    <canvas id="canvas"></canvas>
+    <div class="overlay-text" id="people-count">People Count: 0</div>
+    <div class="overlay-text" id="datetime">--:--</div>
+  </div>
+  <div class="right-panel">
+    <div class="control-panel">
+      <button id="start">開始</button>
+      <button id="stop">停止</button>
+      <label><input type="checkbox" id="showBox" checked> 検出ボックス表示</label><br />
+      <label><input type="checkbox" id="showID"> ID表示</label><br />
+    </div>
+    <div class="total-count">
+      通算検出人数<br />
+      <span id="total">0</span>
+    </div>
+    <div class="log-box">
+      <textarea id="log" readonly></textarea>
+    </div>
+  </div>
+</div>
+<div class="status-bar">
+  実行中 | 現在人数: <span id="current">0</span> | 通算検出: <span id="running-total">0</span>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/coco-ssd"></script>
+<script src="script.js"></script>
+</body>
+</html>

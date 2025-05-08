@@ -1,0 +1,99 @@
+body {
+  margin: 0;
+  background: #333;
+  color: white;
+  font-family: sans-serif;
+}
+
+.container {
+  display: flex;
+  height: 90vh;
+}
+
+.left-panel {
+  position: relative;
+  flex: 1;
+  background: black;
+}
+
+video, canvas {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  position: absolute;
+}
+
+.overlay-text {
+  position: absolute;
+  color: lime;
+  font-weight: bold;
+  background: rgba(0,0,0,0.5);
+  padding: 4px;
+  font-size: 14px;
+}
+
+#people-count { top: 10px; left: 10px; }
+#fps { top: 30px; left: 10px; }
+#datetime { bottom: 10px; left: 10px; color: lime; }
+
+.right-panel {
+  width: 400px;
+  background: #222;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.control-panel button {
+  margin-right: 10px;
+  padding: 12px 20px;
+  font-size: 16px;
+}
+
+.total-count {
+  font-size: 20px;
+  color: white;
+  text-align: center;
+}
+
+.total-count span {
+  font-size: 48px;
+  color: red;
+  display: block;
+}
+
+.log-box textarea {
+  width: 100%;
+  height: 150px;
+  resize: none;
+  background: black;
+  color: lime;
+  font-family: monospace;
+}
+
+.status-bar {
+  background: #111;
+  padding: 5px 10px;
+  font-size: 14px;
+}
+
+@media screen and (max-width: 768px) {
+  .container {
+    flex-direction: column;
+    height: auto;
+  }
+
+  .right-panel {
+    width: 100%;
+  }
+
+  .log-box textarea {
+    height: 100px;
+  }
+
+  .control-panel button {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+}
